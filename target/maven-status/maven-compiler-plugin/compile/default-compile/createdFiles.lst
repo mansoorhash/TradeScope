@@ -1,0 +1,4 @@
+backtester\BacktesterGUI.class
+org\yourcompany\yourproject\APIFETCH.class
+org\yourcompany\yourproject\StockBacktester.class
+stockSelector\StockSelectorGUI.class
