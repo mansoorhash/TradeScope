@@ -31,21 +31,18 @@ public class Stocks {
             StockApi stockApi = new StockApi(AlpacaClientFactory.dataClient(credentials));
 
             while (randomDays.size() < count) {
+
                 LocalDate randomDate = getRandomLocalDate(startInclusive, endExclusive);
 
-                if (randomDays.containsKey(randomDate)) {
-                    continue;
-                }
+                if (randomDays.containsKey(randomDate)) continue;
 
-                if (randomDate.getDayOfWeek() == DayOfWeek.SATURDAY ||
-                        randomDate.getDayOfWeek() == DayOfWeek.SUNDAY) {
+                if (randomDate.getDayOfWeek() == DayOfWeek.SATURDAY || randomDate.getDayOfWeek() == DayOfWeek.SUNDAY)
                     continue;
-                }
 
                 OffsetDateTime start = randomDate.atTime(9, 30).atZone(marketZone).toOffsetDateTime();
                 OffsetDateTime end = randomDate.atTime(16, 0).atZone(marketZone).toOffsetDateTime();
-
-                var response = stockApi.stockBarSingle(
+                try {
+                    var response = stockApi.stockBarSingle(
                         stockname,
                         "1Min",
                         start,
@@ -57,19 +54,22 @@ public class Stocks {
                         null,
                         null,
                         Sort.ASC
-                );
-                System.out.println(response.getBars());
-                List<StockBar> bars = response.getBars();
+                    );
+                    List<StockBar> bars = response.getBars();
 
 
-                if (bars == null || bars.isEmpty()) {
-                    continue;
+                    if (bars == null || bars.isEmpty()) continue;
+
+                    randomDays.put(
+                            randomDate,
+                            new ArrayList<>(bars)
+                    );
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Skipping date " + randomDate + "as no valid bar returned.");
+                } catch (Exception e) {
+                    System.err.println("Failed to fetch " + stockname+ " for "+ randomDate);
+                    e.printStackTrace();
                 }
-
-                randomDays.put(
-                    randomDate,
-                    new ArrayList<>(bars)
-                );
             }
 
 

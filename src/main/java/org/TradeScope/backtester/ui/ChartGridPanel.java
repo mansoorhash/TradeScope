@@ -14,9 +14,14 @@ public class ChartGridPanel extends JPanel {
 
     private final List<ChartPanel> charts;
 
+    private final List<List<Candle>> chartData;
+    private final List<Integer> playbackIndexes;
+
     public ChartGridPanel() {
 
         charts = new ArrayList<>();
+        chartData = new ArrayList<>();
+        playbackIndexes = new ArrayList<>();
 
         setLayout(
             new GridLayout(
@@ -86,6 +91,8 @@ public class ChartGridPanel extends JPanel {
                     new ChartPanel(i + 1);
 
             charts.add(chartPanel);
+            chartData.add(new ArrayList<>());
+            playbackIndexes.add(0);
 
             add(chartPanel);
         }

@@ -35,7 +35,7 @@ public class BacktesterGUI {
             );
 
         splitPane.setResizeWeight(0.75);
-        splitPane.setDividerLocation(900);
+        splitPane.setDividerLocation(898);
 
         frame.add(splitPane);
 

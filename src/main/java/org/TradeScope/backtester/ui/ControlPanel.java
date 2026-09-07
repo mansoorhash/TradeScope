@@ -8,16 +8,20 @@ import javax.swing.JPanel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
 
 public class ControlPanel extends JPanel {
 
     private JLabel selectedStockLabel;
-    private JButton runButton;
     private JComboBox<Integer> chartCountComboBox;
-
+    private JButton fillMissingButton;
+    private JButton generateDataButton;
+    private JButton runButton;
+    private JButton stopButton;
     private String selectedStock;
+
 
     public ControlPanel(String selectedStock) {
 
@@ -38,8 +42,14 @@ public class ControlPanel extends JPanel {
 
         chartCountComboBox = new JComboBox<>( new Integer[]{1, 2, 4, 6});
         chartCountComboBox.setSelectedItem(1);
-        runButton = new JButton("Run Backtest");
 
+        fillMissingButton = new JButton("Fill Missing");
+        fillMissingButton.setEnabled(false);
+        generateDataButton = new JButton("Generate Data");
+
+        runButton = new JButton("Run Backtest");
+        stopButton = new JButton("Stop Backtest");
+        stopButton.setEnabled(false);
         GridBagConstraints gbc = new GridBagConstraints();
 
         gbc.gridx = 0;
@@ -78,13 +88,28 @@ public class ControlPanel extends JPanel {
             new Insets(
                 0,
                 0,
-                15,
+                5,
                 0
             );
 
         add(chartCountComboBox, gbc);
 
-        // Run button
+        // Buttons
+        JPanel buttonPanel =
+            new JPanel(
+                new GridLayout(
+                    2,
+                    2,
+                    5,
+                    5
+                )
+            );
+
+        buttonPanel.add(generateDataButton);
+        buttonPanel.add(fillMissingButton);
+        buttonPanel.add(runButton);
+        buttonPanel.add(stopButton);
+
         gbc.gridy++;
 
         gbc.insets =
@@ -95,8 +120,9 @@ public class ControlPanel extends JPanel {
                 0
             );
 
-        add(runButton, gbc);
+        add(buttonPanel, gbc);
 
+        //Bottom
         gbc.gridy++;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
@@ -117,6 +143,36 @@ public class ControlPanel extends JPanel {
         chartCountComboBox.addActionListener(listener);
     }
 
+    public void addFillMissingListener(
+            ActionListener listener
+    ) {
+        fillMissingButton.addActionListener(listener);
+    }
+
+    public void addGenerateDataListener(
+            ActionListener listener
+    ) {
+        generateDataButton.addActionListener(listener);
+    }
+
+    public void addStopListener(
+            ActionListener listener
+    ) {
+        stopButton.addActionListener(listener);
+    }
+
+    public void setStopButtonEnabled(
+            boolean enabled
+    ) {
+        stopButton.setEnabled(enabled);
+    }
+
+    public void setFillMissingEnabled(
+            boolean enabled
+    ) {
+        fillMissingButton.setEnabled(enabled);
+    }
+
     public int getChartCount() {
 
         Integer count =
@@ -134,15 +190,6 @@ public class ControlPanel extends JPanel {
         return selectedStock;
     }
 
-
-    public void setSelectedStock(String stock) {
-
-        this.selectedStock = stock;
-
-        selectedStockLabel.setText(
-                "Selected stock: " + stock
-        );
-    }
 
     public void setRunButtonEnabled(
             boolean enabled
