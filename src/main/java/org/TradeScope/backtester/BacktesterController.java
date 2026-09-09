@@ -46,6 +46,7 @@ public class BacktesterController {
             chartGridPanel.setChartCount(
                 chartCount
             );
+
             restoreChartData();
             updateFillButton();
         });
@@ -222,10 +223,7 @@ public class BacktesterController {
             );
 
         for (int i = 0; i < chartsToRestore; i++) {
-            chartGridPanel.setChartData(
-                i,
-                generatedChartData.get(i)
-            );
+            showCurrentWindow(i);
         }
     }
 
